@@ -15,6 +15,44 @@ class Student extends BaseController
         return view('pages/student_view', $data);
     }
 
+    public function view($id)
+    {
+        $model = new StudentModel();
+        $student = $model->find($id);
+        if (!$student) {
+            return redirect()->to('/students');
+        }
+        $data = array_merge($this->data, [
+            'student' => $student
+        ]);
+        return view('pages/student_detail', $data);
+    }
+
+    public function edit($id)
+    {
+        $model = new StudentModel();
+        $student = $model->find($id);
+        if (!$student) {
+            return redirect()->to('/students');
+        }
+        $data = array_merge($this->data, [
+            'student' => $student
+        ]);
+        return view('pages/student_edit', $data);
+    }
+
+    public function update($id)
+    {
+        $model = new StudentModel();
+        $data = [
+            'name' => $this->request->getPost('name'),
+            'email' => $this->request->getPost('email'),
+            'course' => $this->request->getPost('course'),
+        ];
+        $model->update($id, $data);
+        return redirect()->to('/student/view/' . $id);
+    }
+
     public function store()
     {
         $model = new StudentModel();

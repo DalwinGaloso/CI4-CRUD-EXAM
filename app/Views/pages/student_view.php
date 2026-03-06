@@ -39,6 +39,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Course</th>
+                                <th>Date Added</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -48,7 +49,9 @@
                                 <td><?= esc($s['name']) ?></td>
                                 <td><?= esc($s['email']) ?></td>
                                 <td><?= esc($s['course']) ?></td>
+                                <td><?= date('F j, Y', strtotime($s['created_at'])) ?></td>
                                 <td>
+                                    <a href="/student/view/<?= $s['id'] ?>" class="btn btn-sm btn-info">View</a>
                                     <form action="/student/delete/<?= $s['id'] ?>" method="post" class="d-inline" onsubmit="return confirm('Are you sure?')">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="_method" value="DELETE">
@@ -58,7 +61,7 @@
                             </tr>
                             <?php endforeach; else: ?>
                             <tr>
-                                <td colspan="4" class="text-center">No students found.</td>
+                                <td colspan="5" class="text-center">No students found.</td>
                             </tr>
                             <?php endif; ?>
                         </tbody>
