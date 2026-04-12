@@ -64,4 +64,26 @@ class UserModel extends Model
     {
         return $this->update($userId, $data);
     }
+
+    /** Return all users with the 'student' role joined with roles table. */
+    public function getStudents(): array
+    {
+        return $this->db->table('users u')
+            ->select('u.id, u.fullname, u.username, u.student_id, u.course, u.year_level, u.section, u.created_at, r.name AS role_name')
+            ->join('roles r', 'r.id = u.role_id', 'left')
+            ->where('r.name', 'student')
+            ->orderBy('u.fullname', 'ASC')
+            ->get()->getResultArray();
+    }
+
+    /** Return a single student by user ID. */
+    public function getStudentById(int $id): ?array
+    {
+        return $this->db->table('users u')
+            ->select('u.id, u.fullname, u.username, u.student_id, u.course, u.year_level, u.section, u.phone, u.address, u.profile_image, u.created_at, r.name AS role_name')
+            ->join('roles r', 'r.id = u.role_id', 'left')
+            ->where('u.id', $id)
+            ->where('r.name', 'student')
+            ->get()->getRowArray() ?: null;
+    }
 }
